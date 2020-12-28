@@ -102,5 +102,34 @@ public class Game2048 extends Game {
         }
         return hasChanged;
     }
+    public void onKeyPress(Key key){
+        if (key == Key.LEFT){
+            moveLeft();
+        }
+        else if(key == Key.RIGHT){
+            moveRight();
+        }
+        else if(key == Key.UP){
+            moveUp();
+        }
+        else if(key == Key.DOWN){
+            moveDown();
+        }
+        else{
+            System.out.print("Error");
+        }
+    }
+    private void moveLeft(){
+        
+    }
+    private void moveRight(){
+        
+    }
+    private void moveUp(){
+        
+    }
+    private void moveDown(){
+        
+    }
 }
 
