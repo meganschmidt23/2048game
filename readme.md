@@ -1,0 +1,1 @@
+I am currently working on creating the 2048 game using a guided session by the Code Gym website. I will be posting my progress in this repo.
