@@ -120,7 +120,21 @@ public class Game2048 extends Game {
         }
     }
     private void moveLeft(){
-        
+        boolean one1 = true;
+        boolean two2 = true;
+        boolean three3 = true;
+        int checker = 0;
+        for (int i = 0; i< SIDE; i++){
+            one1 = compressRow(gameField[i]);
+            two2 = mergeRow(gameField[i]);
+            three3 = compressRow(gameField[i]);
+            if (one1||two2||three3){
+                checker++;
+            }
+        }    
+        if (checker > 0){
+            createNewNumber();
+        }   
     }
     private void moveRight(){
         
