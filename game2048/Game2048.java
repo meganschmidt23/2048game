@@ -165,5 +165,24 @@ public class Game2048 extends Game {
         }
         gameField = newgameField;
     }
+    private int getMaxTileValue(){
+        int max = 0;
+        for(int i =0; i < SIDE; i++){
+            for (int j = 0; j < SIDE; j++){
+                if (max < gameField[i][j]){
+                    max = gameField[i][j];
+                }
+            }
+        }
+        return max;
+    }
+    private void win(){
+        isGameStopped = true;
+        Color colorCell = Color.PINK;
+        String message = "Congratulations! You won!!!!";
+        Color colorText = Color.WHITE;
+        int size = 12;
+        showMessageDialog(colorCell, message, colorText, size);
+    }
 }
 
