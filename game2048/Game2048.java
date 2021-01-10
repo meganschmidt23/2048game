@@ -143,7 +143,20 @@ public class Game2048 extends Game {
         
     }
     private void moveDown(){
-        
+        rotateClockwise();
+        moveLeft();
+        rotateClockwise();
+        rotateClockwise();
+        rotateClockwise();
+    }
+    private void rotateClockwise(){
+        int[][] newgameField = new int[SIDE][SIDE];
+        for (int i = 0; i < SIDE; i++) {
+            for (int j = 0; j < SIDE; j++) {
+                newgameField[j][SIDE - 1 - i] = gameField[i][j];
+            }
+        }
+        gameField = newgameField;
     }
 }
 
