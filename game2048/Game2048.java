@@ -4,14 +4,20 @@ import com.codegym.engine.cell.*;
 
 
 public class Game2048 extends Game {
+    private boolean isGameStopped = false;
     private static final int SIDE = 4;
     private int[][] gameField = new int[SIDE][SIDE];
+    private int score = 0;
+    @Override
     public void initialize() {
         setScreenSize(SIDE,SIDE);
         createGame();
         drawScene();
     }
     private void createGame(){
+        int[][] blankCopy = new int[SIDE][SIDE];
+        gameField = blankCopy;
+        setScore(0);
         createNewNumber();
         createNewNumber(); 
     }
@@ -36,11 +42,14 @@ public class Game2048 extends Game {
         else{
             createNewNumber();
         }
+        if (getMaxTileValue() == 2048 ){
+            win();
+        }
     }
     private Color getColorByValue(int value){
         Color temp = null;
         switch(value){
-            case 0: temp = Color.NONE;
+            case 0: temp = Color.WHITE;
                 break;
             case 2: temp = Color.PINK;
                 break;
@@ -76,7 +85,10 @@ public class Game2048 extends Game {
     }
     private boolean compressRow(int[] row){
         boolean check = true;
-        int[] rowCopy = row.clone();
+        int rowCopy[] = new int[row.length]; 
+        for(int i = 0; i < row.length; i++){
+            rowCopy[i]=row[i];
+        }
         for (int i = 0; i < row.length; i++){
             for (int j = 0; j<row.length - i -1; j++){
                 if (row[j]== 0){
@@ -92,32 +104,53 @@ public class Game2048 extends Game {
     }
     private boolean mergeRow(int[] row){
         boolean hasChanged = false;
-        int[] copy = row.clone();
+        int rowCopy[] = new int[row.length]; 
+        for(int i = 0; i < row.length; i++){
+            rowCopy[i]=row[i];
+        }
         for(int i = 0; i<row.length-1;i++){
             if((row[i] != 0) && (row[i] == row[i+1])){
                 row[i] = row[i]*2;
                 row[i+1] = 0;
                 hasChanged = true;
+                setScore(score + row[i]);
             }
         }
         return hasChanged;
     }
     public void onKeyPress(Key key){
-        if (key == Key.LEFT){
-            moveLeft();
+        if (isGameStopped){
+            if((key == Key.SPACE))
+            {
+                isGameStopped = false;
+                createGame();
+                drawScene();
+            }
         }
-        else if(key == Key.RIGHT){
-            moveRight();
-        }
-        else if(key == Key.UP){
-            moveUp();
-        }
-        else if(key == Key.DOWN){
-            moveDown();
+        else if(!canUserMove()){
+            gameOver();
         }
         else{
-            System.out.print("Error");
-        }
+            if (key == Key.LEFT){
+                moveLeft();
+                drawScene();
+            }
+            else if(key == Key.RIGHT){
+                moveRight();
+                drawScene();
+            }
+            else if(key == Key.UP){
+                moveUp();
+                drawScene();
+            }
+            else if(key == Key.DOWN){
+                moveDown();
+                drawScene();
+            }
+            else{
+                System.out.print("Error");
+            }
+        }    
     }
     private void moveLeft(){
         boolean one1 = true;
@@ -134,7 +167,7 @@ public class Game2048 extends Game {
         }    
         if (checker > 0){
             createNewNumber();
-        }   
+        }
     }
     private void moveRight(){
         rotateClockwise();
@@ -156,6 +189,7 @@ public class Game2048 extends Game {
         rotateClockwise();
         rotateClockwise();
         rotateClockwise();
+    }
     private void rotateClockwise(){
         int[][] newgameField = new int[SIDE][SIDE];
         for (int i = 0; i < SIDE; i++) {
@@ -183,6 +217,31 @@ public class Game2048 extends Game {
         Color colorText = Color.WHITE;
         int size = 12;
         showMessageDialog(colorCell, message, colorText, size);
+    }
+    private boolean canUserMove(){
+        for (int y = 0; y < SIDE; y++) {
+            for (int x = 0; x < SIDE; x++) {
+                if (gameField[y][x] == 0) {
+                    return true;
+                } else if (y < SIDE - 1 && gameField[y][x] == gameField[y + 1][x]) {
+                    return true;
+                } else if ((x < SIDE - 1) && gameField[y][x] == gameField[y][x + 1]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private void gameOver(){
+       isGameStopped = true;
+        Color colorCell = Color.RED;
+        String message = "Sorry. You lost. Try again!";
+        Color colorText = Color.BLACK;
+        int size = 12;
+        showMessageDialog(colorCell, message, colorText, size);
+    }
+    public void setScore(int newScore){
+        score = newScore; 
     }
 }
 
